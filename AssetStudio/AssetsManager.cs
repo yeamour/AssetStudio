@@ -451,7 +451,8 @@ namespace AssetStudio
                                 obj = new RectTransform(objectReader);
                                 break;
                             case ClassIDType.Shader:
-                                obj = new Shader(objectReader);
+                                //obj = new Shader(objectReader);
+                                obj = new NamedObject(objectReader);
                                 break;
                             case ClassIDType.SkinnedMeshRenderer:
                                 obj = new SkinnedMeshRenderer(objectReader);

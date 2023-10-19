@@ -1,4 +1,5 @@
 ﻿using AssetStudio;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -147,6 +148,7 @@ namespace AssetStudioGUI
                 foreach (var asset in assetsFile.Objects)
                 {
                     var assetItem = new AssetItem(asset);
+                    assetItem.originalPath = assetsFile.originalPath;
                     objectAssetItemDic.Add(asset, assetItem);
                     assetItem.UniqueID = " #" + i;
                     var exportable = false;
@@ -330,10 +332,44 @@ namespace AssetStudioGUI
             }
             treeNodeDictionary.Clear();
 
+            SaveSize(objectAssetItemDic);
             objectAssetItemDic.Clear();
 
             return (productName, treeNodeCollection);
         }
+
+        private class AssetSize
+        {
+            public string name;
+            public string bundle;
+            public string container;
+            public string type;
+            public float size;
+
+            public AssetSize(string name, string bundle, string container, string type, float size)
+            {
+                this.name = name;
+                this.bundle = bundle;
+                this.container = container;
+                this.type = type;
+                this.size = size;
+            }
+        }
+        private static void SaveSize(Dictionary<Object, AssetItem> objectAssetItemDic)
+        {
+            if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return;
+
+            List<AssetSize> result = new List<AssetSize>();
+            foreach (var item in objectAssetItemDic)
+            {
+                AssetItem asset = item.Value;
+                result.Add(new AssetSize(asset.Text, Path.GetFileName(asset.originalPath), asset.Container, asset.TypeString, asset.FullSize));
+            }
+            string info = JsonConvert.SerializeObject(result, Formatting.Indented);
+            string path = Path.GetDirectoryName(result[0].bundle) + "/AssetSize.json";
+            File.WriteAllText(path, info);
+        }
+       
 
         public static Dictionary<string, SortedDictionary<int, TypeTreeItem>> BuildClassStructure()
         {
