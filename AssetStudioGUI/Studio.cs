@@ -359,14 +359,19 @@ namespace AssetStudioGUI
         {
             if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return;
 
+            string path = string.Empty;
             List<AssetSize> result = new List<AssetSize>();
             foreach (var item in objectAssetItemDic)
             {
                 AssetItem asset = item.Value;
                 result.Add(new AssetSize(asset.Text, Path.GetFileName(asset.originalPath), asset.Container, asset.TypeString, asset.FullSize));
+                if (path == string.Empty)
+                {
+                    path = asset.originalPath;
+                }
             }
             string info = JsonConvert.SerializeObject(result, Formatting.Indented);
-            string path = Path.GetDirectoryName(result[0].bundle) + "/AssetSize.json";
+            path = Path.GetDirectoryName(path) + "/AssetSize.json";
             File.WriteAllText(path, info);
         }
        
