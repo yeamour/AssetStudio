@@ -354,27 +354,37 @@ namespace AssetStudioGUI
                 this.type = type;
                 this.size = size;
             }
+
+            public string ToCSV()
+            {
+                return $"{name},{bundle},{container},{type},{size}";
+            }
         }
         private static void SaveSize(Dictionary<Object, AssetItem> objectAssetItemDic)
         {
             if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return;
 
             string path = string.Empty;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append("name,bundle,container,type,size");
+            sb.AppendLine();
             List<AssetSize> result = new List<AssetSize>();
             foreach (var item in objectAssetItemDic)
             {
                 AssetItem asset = item.Value;
-                result.Add(new AssetSize(asset.Text, Path.GetFileName(asset.originalPath), asset.Container, asset.TypeString, asset.FullSize));
+                var size = new AssetSize(asset.Text, Path.GetFileName(asset.originalPath), asset.Container, asset.TypeString, asset.FullSize);
+                result.Add(size);
+                sb.Append(size.ToCSV());
+                sb.AppendLine();
                 if (path == string.Empty)
                 {
                     path = asset.originalPath;
                 }
             }
-            string info = JsonConvert.SerializeObject(result, Formatting.Indented);
-            path = Path.GetDirectoryName(path) + "/AssetSize.json";
-            File.WriteAllText(path, info);
+            File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.csv", sb.ToString());
+            File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.json", JsonConvert.SerializeObject(result, Formatting.Indented));
         }
-       
+
 
         public static Dictionary<string, SortedDictionary<int, TypeTreeItem>> BuildClassStructure()
         {
