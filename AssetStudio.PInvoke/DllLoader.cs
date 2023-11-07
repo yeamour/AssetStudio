@@ -40,7 +40,7 @@ namespace AssetStudio.PInvoke
         private static class Win32
         {
 
-            internal static void LoadDll(string dllDir, string dllName)
+            public static void LoadDll(string dllDir, string dllName)
             {
                 var dllFileName = $"{dllName}.dll";
                 var directedDllPath = Path.Combine(dllDir, dllFileName);
@@ -70,7 +70,7 @@ namespace AssetStudio.PInvoke
         private static class Posix
         {
 
-            internal static void LoadDll(string dllDir, string dllName)
+            public static void LoadDll(string dllDir, string dllName)
             {
                 string dllExtension;
 

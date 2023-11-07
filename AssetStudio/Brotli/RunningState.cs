@@ -6,32 +6,32 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Org.Brotli.Dec
 {
 	/// <summary>Enumeration of decoding state-machine.</summary>
-	internal sealed class RunningState
+	public sealed class RunningState
 	{
-		internal const int Uninitialized = 0;
+		public const int Uninitialized = 0;
 
-		internal const int BlockStart = 1;
+		public const int BlockStart = 1;
 
-		internal const int CompressedBlockStart = 2;
+		public const int CompressedBlockStart = 2;
 
-		internal const int MainLoop = 3;
+		public const int MainLoop = 3;
 
-		internal const int ReadMetadata = 4;
+		public const int ReadMetadata = 4;
 
-		internal const int CopyUncompressed = 5;
+		public const int CopyUncompressed = 5;
 
-		internal const int InsertLoop = 6;
+		public const int InsertLoop = 6;
 
-		internal const int CopyLoop = 7;
+		public const int CopyLoop = 7;
 
-		internal const int CopyWrapBuffer = 8;
+		public const int CopyWrapBuffer = 8;
 
-		internal const int Transform = 9;
+		public const int Transform = 9;
 
-		internal const int Finished = 10;
+		public const int Finished = 10;
 
-		internal const int Closed = 11;
+		public const int Closed = 11;
 
-		internal const int Write = 12;
+		public const int Write = 12;
 	}
 }

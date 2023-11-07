@@ -358,7 +358,7 @@ namespace FMOD
         TYPE_MEMORY             = 0x00000100,   /* Verbose logging for memory operations, only use this if you are debugging a memory related issue. */
         TYPE_FILE               = 0x00000200,   /* Verbose logging for file access, only use this if you are debugging a file related issue. */
         TYPE_CODEC              = 0x00000400,   /* Verbose logging for codec initialization, only use this if you are debugging a codec related issue. */
-        TYPE_TRACE              = 0x00000800,   /* Verbose logging for internal errors, use this for tracking the origin of error codes. */
+        TYPE_TRACE              = 0x00000800,   /* Verbose logging for public errors, use this for tracking the origin of error codes. */
 
         DISPLAY_TIMESTAMPS      = 0x00010000,   /* Display the time stamp of the log message in milliseconds. */
         DISPLAY_LINENUMBERS     = 0x00020000,   /* Display the source code file and line number for where the message originated. */
@@ -1558,7 +1558,7 @@ namespace FMOD
         public uint                stackSizeMixer;             /* [r/w] Optional. Specify 0 to ignore. Specify the stack size for the FMOD mixer thread.  Useful for custom dsps that use excess stack.  Default 49,152 (48kb) */
         public DSP_RESAMPLER       resamplerMethod;            /* [r/w] Optional. Specify 0 to ignore. Resampling method used with fmod's software mixer.  See FMOD_DSP_RESAMPLER for details on methods. */
         public uint                commandQueueSize;           /* [r/w] Optional. Specify 0 to ignore. Specify the command queue size for thread safe processing.  Default 2048 (2kb) */
-        public uint                randomSeed;                 /* [r/w] Optional. Specify 0 to ignore. Seed value that FMOD will use to initialize its internal random number generators. */
+        public uint                randomSeed;                 /* [r/w] Optional. Specify 0 to ignore. Seed value that FMOD will use to initialize its public random number generators. */
     }
 
     /*
@@ -4286,7 +4286,7 @@ namespace FMOD
 
     class StringMarshalHelper
     {
-        static internal void NativeToBuilder(StringBuilder builder, IntPtr nativeMem)
+        static public void NativeToBuilder(StringBuilder builder, IntPtr nativeMem)
         {
             byte[] bytes = new byte[builder.Capacity];
             Marshal.Copy(nativeMem, bytes, 0, builder.Capacity);

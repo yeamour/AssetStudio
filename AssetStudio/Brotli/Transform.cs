@@ -6,7 +6,7 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Org.Brotli.Dec
 {
 	/// <summary>Transformations on dictionary words.</summary>
-	internal sealed class Transform
+	public sealed class Transform
 	{
 		private readonly byte[] prefix;
 
@@ -14,14 +14,14 @@ namespace Org.Brotli.Dec
 
 		private readonly byte[] suffix;
 
-		internal Transform(string prefix, int type, string suffix)
+		public Transform(string prefix, int type, string suffix)
 		{
 			this.prefix = ReadUniBytes(prefix);
 			this.type = type;
 			this.suffix = ReadUniBytes(suffix);
 		}
 
-		internal static byte[] ReadUniBytes(string uniBytes)
+		public static byte[] ReadUniBytes(string uniBytes)
 		{
 			byte[] result = new byte[uniBytes.Length];
 			for (int i = 0; i < result.Length; ++i)
@@ -31,7 +31,7 @@ namespace Org.Brotli.Dec
 			return result;
 		}
 
-		internal static readonly Org.Brotli.Dec.Transform[] Transforms = new Org.Brotli.Dec.Transform[] { new Org.Brotli.Dec.Transform(string.Empty, Org.Brotli.Dec.WordTransformType.Identity, string.Empty), new Org.Brotli.Dec.Transform(string.Empty, 
+		public static readonly Org.Brotli.Dec.Transform[] Transforms = new Org.Brotli.Dec.Transform[] { new Org.Brotli.Dec.Transform(string.Empty, Org.Brotli.Dec.WordTransformType.Identity, string.Empty), new Org.Brotli.Dec.Transform(string.Empty, 
 			Org.Brotli.Dec.WordTransformType.Identity, " "), new Org.Brotli.Dec.Transform(" ", Org.Brotli.Dec.WordTransformType.Identity, " "), new Org.Brotli.Dec.Transform(string.Empty, Org.Brotli.Dec.WordTransformType.OmitFirst1, string.Empty), new Org.Brotli.Dec.Transform
 			(string.Empty, Org.Brotli.Dec.WordTransformType.UppercaseFirst, " "), new Org.Brotli.Dec.Transform(string.Empty, Org.Brotli.Dec.WordTransformType.Identity, " the "), new Org.Brotli.Dec.Transform(" ", Org.Brotli.Dec.WordTransformType.Identity
 			, string.Empty), new Org.Brotli.Dec.Transform("s ", Org.Brotli.Dec.WordTransformType.Identity, " "), new Org.Brotli.Dec.Transform(string.Empty, Org.Brotli.Dec.WordTransformType.Identity, " of "), new Org.Brotli.Dec.Transform(string.Empty, Org.Brotli.Dec.WordTransformType
@@ -79,7 +79,7 @@ namespace Org.Brotli.Dec
 			.UppercaseAll, ". "), new Org.Brotli.Dec.Transform(" ", Org.Brotli.Dec.WordTransformType.UppercaseFirst, "=\""), new Org.Brotli.Dec.Transform(" ", Org.Brotli.Dec.WordTransformType.UppercaseAll, "='"), new Org.Brotli.Dec.Transform(" ", Org.Brotli.Dec.WordTransformType
 			.UppercaseFirst, "='") };
 
-		internal static int TransformDictionaryWord(byte[] dst, int dstOffset, byte[] word, int wordOffset, int len, Org.Brotli.Dec.Transform transform)
+		public static int TransformDictionaryWord(byte[] dst, int dstOffset, byte[] word, int wordOffset, int len, Org.Brotli.Dec.Transform transform)
 		{
 			int offset = dstOffset;
 			// Copy prefix.

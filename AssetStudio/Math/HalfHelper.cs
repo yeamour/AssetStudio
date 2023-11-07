@@ -12,7 +12,7 @@ namespace AssetStudio
     ///     - Fast Half Float Conversions, Jeroen van der Zijp, link: http://www.fox-toolkit.org/ftp/fasthalffloatconversion.pdf
     /// </remarks>
     [ComVisible(false)]
-    internal static class HalfHelper
+    public static class HalfHelper
     {
         private static uint[] mantissaTable = GenerateMantissaTable();
         private static uint[] exponentTable = GenerateExponentTable();

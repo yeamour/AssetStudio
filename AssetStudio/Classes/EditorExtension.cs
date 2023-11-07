@@ -12,7 +12,7 @@ namespace AssetStudio
             if (platform == BuildTarget.NoTarget)
             {
                 var m_PrefabParentObject = new PPtr<EditorExtension>(reader);
-                var m_PrefabInternal = new PPtr<Object>(reader); //PPtr<Prefab>
+                var m_Prefabpublic = new PPtr<Object>(reader); //PPtr<Prefab>
             }
         }
     }

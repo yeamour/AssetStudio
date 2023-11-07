@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace SpirV
 {
-	internal sealed class Reader
+	public sealed class Reader
 	{
 		public Reader(BinaryReader reader)
 		{

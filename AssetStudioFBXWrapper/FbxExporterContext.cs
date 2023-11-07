@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace AssetStudio.FbxInterop
 {
-    internal sealed partial class FbxExporterContext : IDisposable
+    public sealed partial class FbxExporterContext : IDisposable
     {
 
         private IntPtr _pContext;
@@ -59,7 +59,7 @@ namespace AssetStudio.FbxInterop
             }
         }
 
-        internal void Initialize(string fileName, float scaleFactor, int versionIndex, bool isAscii, bool is60Fps)
+        public void Initialize(string fileName, float scaleFactor, int versionIndex, bool isAscii, bool is60Fps)
         {
             EnsureNotDisposed();
 
@@ -72,7 +72,7 @@ namespace AssetStudio.FbxInterop
             }
         }
 
-        internal void SetFramePaths(HashSet<string> framePaths)
+        public void SetFramePaths(HashSet<string> framePaths)
         {
             EnsureNotDisposed();
 
@@ -87,14 +87,14 @@ namespace AssetStudio.FbxInterop
             AsFbxSetFramePaths(_pContext, framePathArray);
         }
 
-        internal void ExportScene()
+        public void ExportScene()
         {
             EnsureNotDisposed();
 
             AsFbxExportScene(_pContext);
         }
 
-        internal void ExportFrame(List<ImportedMesh> meshList, List<ImportedFrame> meshFrames, ImportedFrame rootFrame)
+        public void ExportFrame(List<ImportedMesh> meshList, List<ImportedFrame> meshFrames, ImportedFrame rootFrame)
         {
             var rootNode = AsFbxGetSceneRootNode(_pContext);
 
@@ -128,7 +128,7 @@ namespace AssetStudio.FbxInterop
             }
         }
 
-        internal void SetJointsNode(ImportedFrame rootFrame, HashSet<string> bonePaths, bool castToBone, float boneSize)
+        public void SetJointsNode(ImportedFrame rootFrame, HashSet<string> bonePaths, bool castToBone, float boneSize)
         {
             var frameStack = new Stack<ImportedFrame>();
 
@@ -168,12 +168,12 @@ namespace AssetStudio.FbxInterop
             }
         }
 
-        internal void PrepareMaterials(int materialCount, int textureCount)
+        public void PrepareMaterials(int materialCount, int textureCount)
         {
             AsFbxPrepareMaterials(_pContext, materialCount, textureCount);
         }
 
-        internal void ExportMeshFromFrame(ImportedFrame rootFrame, ImportedFrame meshFrame, List<ImportedMesh> meshList, List<ImportedMaterial> materialList, List<ImportedTexture> textureList, bool exportSkins, bool exportAllUvsAsDiffuseMaps)
+        public void ExportMeshFromFrame(ImportedFrame rootFrame, ImportedFrame meshFrame, List<ImportedMesh> meshList, List<ImportedMaterial> materialList, List<ImportedTexture> textureList, bool exportSkins, bool exportAllUvsAsDiffuseMaps)
         {
             var meshNode = _frameToNode[meshFrame];
             var mesh = ImportedHelpers.FindMesh(meshFrame.Path, meshList);
@@ -464,7 +464,7 @@ namespace AssetStudio.FbxInterop
             return 4 * m + n;
         }
 
-        internal void ExportAnimations(ImportedFrame rootFrame, List<ImportedKeyframedAnimation> animationList, bool eulerFilter, float filterPrecision)
+        public void ExportAnimations(ImportedFrame rootFrame, List<ImportedKeyframedAnimation> animationList, bool eulerFilter, float filterPrecision)
         {
             if (animationList == null || animationList.Count == 0)
             {
@@ -575,7 +575,7 @@ namespace AssetStudio.FbxInterop
             }
         }
 
-        internal void ExportMorphs(ImportedFrame rootFrame, List<ImportedMorph> morphList)
+        public void ExportMorphs(ImportedFrame rootFrame, List<ImportedMorph> morphList)
         {
             if (morphList == null || morphList.Count == 0)
             {

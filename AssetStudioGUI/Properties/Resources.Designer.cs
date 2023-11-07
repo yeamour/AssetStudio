@@ -22,21 +22,21 @@ namespace AssetStudioGUI.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        public Resources() {
         }
         
         /// <summary>
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AssetStudioGUI.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace AssetStudioGUI.Properties {
         ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace AssetStudioGUI.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Icon _as {
+        public static System.Drawing.Icon _as {
             get {
                 object obj = ResourceManager.GetObject("_as", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -88,7 +88,7 @@ namespace AssetStudioGUI.Properties {
         ///	color += vec3(0.779, 0.716, 0.453) * ContributionWeights.y;
         ///	color += vec3(0.368, 0.477, 0. [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static string fs {
+        public static string fs {
             get {
                 return ResourceManager.GetString("fs", resourceCulture);
             }
@@ -104,7 +104,7 @@ namespace AssetStudioGUI.Properties {
         ///	outputColor = vec4(0, 0, 0, 1);
         ///} 的本地化字符串。
         /// </summary>
-        internal static string fsBlack {
+        public static string fsBlack {
             get {
                 return ResourceManager.GetString("fsBlack", resourceCulture);
             }
@@ -121,7 +121,7 @@ namespace AssetStudioGUI.Properties {
         ///	outputColor = color;
         ///} 的本地化字符串。
         /// </summary>
-        internal static string fsColor {
+        public static string fsColor {
             get {
                 return ResourceManager.GetString("fsColor", resourceCulture);
             }
@@ -130,7 +130,7 @@ namespace AssetStudioGUI.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap preview {
+        public static System.Drawing.Bitmap preview {
             get {
                 object obj = ResourceManager.GetObject("preview", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -157,7 +157,7 @@ namespace AssetStudioGUI.Properties {
         ///	color = vertexColor; 
         ///} 的本地化字符串。
         /// </summary>
-        internal static string vs {
+        public static string vs {
             get {
                 return ResourceManager.GetString("vs", resourceCulture);
             }

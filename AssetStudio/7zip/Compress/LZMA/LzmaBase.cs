@@ -2,7 +2,7 @@
 
 namespace SevenZip.Compression.LZMA
 {
-	internal abstract class Base
+	public abstract class Base
 	{
 		public const uint kNumRepDistances = 4;
 		public const uint kNumStates = 12;

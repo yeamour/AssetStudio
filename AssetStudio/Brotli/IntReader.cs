@@ -6,13 +6,13 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Org.Brotli.Dec
 {
 	/// <summary>Byte-to-int conversion magic.</summary>
-	internal sealed class IntReader
+	public sealed class IntReader
 	{
 		private byte[] byteBuffer;
 
 		private int[] intBuffer;
 
-		internal static void Init(Org.Brotli.Dec.IntReader ir, byte[] byteBuffer, int[] intBuffer)
+		public static void Init(Org.Brotli.Dec.IntReader ir, byte[] byteBuffer, int[] intBuffer)
 		{
 			ir.byteBuffer = byteBuffer;
 			ir.intBuffer = intBuffer;
@@ -24,7 +24,7 @@ namespace Org.Brotli.Dec
 		/// NB: intLen == 4 * byteSize!
 		/// NB: intLen should be less or equal to intBuffer length.
 		/// </remarks>
-		internal static void Convert(Org.Brotli.Dec.IntReader ir, int intLen)
+		public static void Convert(Org.Brotli.Dec.IntReader ir, int intLen)
 		{
 			for (int i = 0; i < intLen; ++i)
 			{

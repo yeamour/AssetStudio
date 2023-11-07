@@ -6,13 +6,13 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Org.Brotli.Dec
 {
 	/// <summary>Utilities for building Huffman decoding tables.</summary>
-	internal sealed class Huffman
+	public sealed class Huffman
 	{
 		/// <summary>
 		/// Maximum possible Huffman table size for an alphabet size of 704, max code length 15 and root
 		/// table bits 8.
 		/// </summary>
-		internal const int HuffmanMaxTableSize = 1080;
+		public const int HuffmanMaxTableSize = 1080;
 
 		private const int MaxLength = 15;
 
@@ -69,7 +69,7 @@ namespace Org.Brotli.Dec
 		}
 
 		/// <summary>Builds Huffman lookup table assuming code lengths are in symbol order.</summary>
-		internal static void BuildHuffmanTable(int[] rootTable, int tableOffset, int rootBits, int[] codeLengths, int codeLengthsSize)
+		public static void BuildHuffmanTable(int[] rootTable, int tableOffset, int rootBits, int[] codeLengths, int codeLengthsSize)
 		{
 			int key;
 			// Reversed prefix code.

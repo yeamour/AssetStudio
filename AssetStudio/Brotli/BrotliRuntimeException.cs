@@ -7,14 +7,14 @@ namespace Org.Brotli.Dec
 {
 	/// <summary>Unchecked exception used internally.</summary>
 	[System.Serializable]
-	internal class BrotliRuntimeException : System.Exception
+	public class BrotliRuntimeException : System.Exception
 	{
-		internal BrotliRuntimeException(string message)
+		public BrotliRuntimeException(string message)
 			: base(message)
 		{
 		}
 
-		internal BrotliRuntimeException(string message, System.Exception cause)
+		public BrotliRuntimeException(string message, System.Exception cause)
 			: base(message, cause)
 		{
 		}

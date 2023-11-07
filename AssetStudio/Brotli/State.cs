@@ -5,111 +5,111 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 */
 namespace Org.Brotli.Dec
 {
-	internal sealed class State
+	public sealed class State
 	{
-		internal int runningState = Org.Brotli.Dec.RunningState.Uninitialized;
+		public int runningState = Org.Brotli.Dec.RunningState.Uninitialized;
 
-		internal int nextRunningState;
+		public int nextRunningState;
 
-		internal readonly Org.Brotli.Dec.BitReader br = new Org.Brotli.Dec.BitReader();
+		public readonly Org.Brotli.Dec.BitReader br = new Org.Brotli.Dec.BitReader();
 
-		internal byte[] ringBuffer;
+		public byte[] ringBuffer;
 
-		internal readonly int[] blockTypeTrees = new int[3 * Org.Brotli.Dec.Huffman.HuffmanMaxTableSize];
+		public readonly int[] blockTypeTrees = new int[3 * Org.Brotli.Dec.Huffman.HuffmanMaxTableSize];
 
-		internal readonly int[] blockLenTrees = new int[3 * Org.Brotli.Dec.Huffman.HuffmanMaxTableSize];
+		public readonly int[] blockLenTrees = new int[3 * Org.Brotli.Dec.Huffman.HuffmanMaxTableSize];
 
-		internal int metaBlockLength;
+		public int metaBlockLength;
 
-		internal bool inputEnd;
+		public bool inputEnd;
 
-		internal bool isUncompressed;
+		public bool isUncompressed;
 
-		internal bool isMetadata;
+		public bool isMetadata;
 
-		internal readonly Org.Brotli.Dec.HuffmanTreeGroup hGroup0 = new Org.Brotli.Dec.HuffmanTreeGroup();
+		public readonly Org.Brotli.Dec.HuffmanTreeGroup hGroup0 = new Org.Brotli.Dec.HuffmanTreeGroup();
 
-		internal readonly Org.Brotli.Dec.HuffmanTreeGroup hGroup1 = new Org.Brotli.Dec.HuffmanTreeGroup();
+		public readonly Org.Brotli.Dec.HuffmanTreeGroup hGroup1 = new Org.Brotli.Dec.HuffmanTreeGroup();
 
-		internal readonly Org.Brotli.Dec.HuffmanTreeGroup hGroup2 = new Org.Brotli.Dec.HuffmanTreeGroup();
+		public readonly Org.Brotli.Dec.HuffmanTreeGroup hGroup2 = new Org.Brotli.Dec.HuffmanTreeGroup();
 
-		internal readonly int[] blockLength = new int[3];
+		public readonly int[] blockLength = new int[3];
 
-		internal readonly int[] numBlockTypes = new int[3];
+		public readonly int[] numBlockTypes = new int[3];
 
-		internal readonly int[] blockTypeRb = new int[6];
+		public readonly int[] blockTypeRb = new int[6];
 
-		internal readonly int[] distRb = new int[] { 16, 15, 11, 4 };
+		public readonly int[] distRb = new int[] { 16, 15, 11, 4 };
 
-		internal int pos = 0;
+		public int pos = 0;
 
-		internal int maxDistance = 0;
+		public int maxDistance = 0;
 
-		internal int distRbIdx = 0;
+		public int distRbIdx = 0;
 
-		internal bool trivialLiteralContext = false;
+		public bool trivialLiteralContext = false;
 
-		internal int literalTreeIndex = 0;
+		public int literalTreeIndex = 0;
 
-		internal int literalTree;
+		public int literalTree;
 
-		internal int j;
+		public int j;
 
-		internal int insertLength;
+		public int insertLength;
 
-		internal byte[] contextModes;
+		public byte[] contextModes;
 
-		internal byte[] contextMap;
+		public byte[] contextMap;
 
-		internal int contextMapSlice;
+		public int contextMapSlice;
 
-		internal int distContextMapSlice;
+		public int distContextMapSlice;
 
-		internal int contextLookupOffset1;
+		public int contextLookupOffset1;
 
-		internal int contextLookupOffset2;
+		public int contextLookupOffset2;
 
-		internal int treeCommandOffset;
+		public int treeCommandOffset;
 
-		internal int distanceCode;
+		public int distanceCode;
 
-		internal byte[] distContextMap;
+		public byte[] distContextMap;
 
-		internal int numDirectDistanceCodes;
+		public int numDirectDistanceCodes;
 
-		internal int distancePostfixMask;
+		public int distancePostfixMask;
 
-		internal int distancePostfixBits;
+		public int distancePostfixBits;
 
-		internal int distance;
+		public int distance;
 
-		internal int copyLength;
+		public int copyLength;
 
-		internal int copyDst;
+		public int copyDst;
 
-		internal int maxBackwardDistance;
+		public int maxBackwardDistance;
 
-		internal int maxRingBufferSize;
+		public int maxRingBufferSize;
 
-		internal int ringBufferSize = 0;
+		public int ringBufferSize = 0;
 
-		internal long expectedTotalSize = 0;
+		public long expectedTotalSize = 0;
 
-		internal byte[] customDictionary = new byte[0];
+		public byte[] customDictionary = new byte[0];
 
-		internal int bytesToIgnore = 0;
+		public int bytesToIgnore = 0;
 
-		internal int outputOffset;
+		public int outputOffset;
 
-		internal int outputLength;
+		public int outputLength;
 
-		internal int outputUsed;
+		public int outputUsed;
 
-		internal int bytesWritten;
+		public int bytesWritten;
 
-		internal int bytesToWrite;
+		public int bytesToWrite;
 
-		internal byte[] output;
+		public byte[] output;
 
 		// Current meta-block header information.
 		// TODO: Update to current spec.
@@ -135,7 +135,7 @@ namespace Org.Brotli.Dec
 		/// <summary>Associate input with decoder state.</summary>
 		/// <param name="state">uninitialized state without associated input</param>
 		/// <param name="input">compressed data source</param>
-		internal static void SetInput(Org.Brotli.Dec.State state, System.IO.Stream input)
+		public static void SetInput(Org.Brotli.Dec.State state, System.IO.Stream input)
 		{
 			if (state.runningState != Org.Brotli.Dec.RunningState.Uninitialized)
 			{
@@ -154,7 +154,7 @@ namespace Org.Brotli.Dec
 		}
 
 		/// <exception cref="System.IO.IOException"/>
-		internal static void Close(Org.Brotli.Dec.State state)
+		public static void Close(Org.Brotli.Dec.State state)
 		{
 			if (state.runningState == Org.Brotli.Dec.RunningState.Uninitialized)
 			{

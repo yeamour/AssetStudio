@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace AssetStudio
         public string SpecifyUnityVersion;
         public List<SerializedFile> assetsFileList = new List<SerializedFile>();
 
-        internal Dictionary<string, int> assetsFileIndexCache = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        internal Dictionary<string, BinaryReader> resourceFileReaders = new Dictionary<string, BinaryReader>(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, int> assetsFileIndexCache = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, BinaryReader> resourceFileReaders = new Dictionary<string, BinaryReader>(StringComparer.OrdinalIgnoreCase);
 
         private List<string> importFiles = new List<string>();
         private HashSet<string> importFilesHash = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -45,12 +46,10 @@ namespace AssetStudio
                 importFilesHash.Add(Path.GetFileName(file));
             }
 
-            Progress.Reset();
             //use a for loop because list size can change
             for (var i = 0; i < importFiles.Count; i++)
             {
                 LoadFile(importFiles[i]);
-                Progress.Report(i + 1, importFiles.Count);
             }
 
             importFiles.Clear();

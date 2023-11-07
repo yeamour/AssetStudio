@@ -26,10 +26,10 @@ namespace AssetStudio
     public struct Half : IComparable, IFormattable, IConvertible, IComparable<Half>, IEquatable<Half>
     {
         /// <summary>
-        /// Internal representation of the half-precision floating-point number.
+        /// public representation of the half-precision floating-point number.
         /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        internal ushort value;
+        public ushort value;
 
         #region Constants
         /// <summary>

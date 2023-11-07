@@ -6,7 +6,7 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Org.Brotli.Dec
 {
 	/// <summary>Bit reading helpers.</summary>
-	internal sealed class BitReader
+	public sealed class BitReader
 	{
 		/// <summary>
 		/// Input byte buffer, consist of a ring-buffer and a "slack" region where bytes from the start of
@@ -34,10 +34,10 @@ namespace Org.Brotli.Dec
 		private bool endOfStreamReached;
 
 		/// <summary>Pre-fetched bits.</summary>
-		internal long accumulator;
+		public long accumulator;
 
 		/// <summary>Current bit-reading position in accumulator.</summary>
-		internal int bitOffset;
+		public int bitOffset;
 
 		/// <summary>Offset of next item in intBuffer.</summary>
 		private int intOffset;
@@ -52,7 +52,7 @@ namespace Org.Brotli.Dec
 		/// <p> After encountering the end of the input stream, 64 additional zero bytes are copied to the
 		/// buffer.
 		/// </remarks>
-		internal static void ReadMoreInput(Org.Brotli.Dec.BitReader br)
+		public static void ReadMoreInput(Org.Brotli.Dec.BitReader br)
 		{
 			// TODO: Split to check and read; move read outside of decoding loop.
 			if (br.intOffset <= Capacity - 9)
@@ -94,7 +94,7 @@ namespace Org.Brotli.Dec
 			Org.Brotli.Dec.IntReader.Convert(br.intReader, bytesRead >> 2);
 		}
 
-		internal static void CheckHealth(Org.Brotli.Dec.BitReader br, bool endOfStream)
+		public static void CheckHealth(Org.Brotli.Dec.BitReader br, bool endOfStream)
 		{
 			if (!br.endOfStreamReached)
 			{
@@ -112,7 +112,7 @@ namespace Org.Brotli.Dec
 		}
 
 		/// <summary>Advances the Read buffer by 5 bytes to make room for reading next 24 bits.</summary>
-		internal static void FillBitWindow(Org.Brotli.Dec.BitReader br)
+		public static void FillBitWindow(Org.Brotli.Dec.BitReader br)
 		{
 			if (br.bitOffset >= 32)
 			{
@@ -122,7 +122,7 @@ namespace Org.Brotli.Dec
 		}
 
 		/// <summary>Reads the specified number of bits from Read Buffer.</summary>
-		internal static int ReadBits(Org.Brotli.Dec.BitReader br, int n)
+		public static int ReadBits(Org.Brotli.Dec.BitReader br, int n)
 		{
 			FillBitWindow(br);
 			int val = (int)((long)(((ulong)br.accumulator) >> br.bitOffset)) & ((1 << n) - 1);
@@ -138,7 +138,7 @@ namespace Org.Brotli.Dec
 		/// </remarks>
 		/// <param name="br">BitReader POJO</param>
 		/// <param name="input">data source</param>
-		internal static void Init(Org.Brotli.Dec.BitReader br, System.IO.Stream input)
+		public static void Init(Org.Brotli.Dec.BitReader br, System.IO.Stream input)
 		{
 			if (br.input != null)
 			{
@@ -161,7 +161,7 @@ namespace Org.Brotli.Dec
 			FillBitWindow(br);
 		}
 
-		internal static void Reload(Org.Brotli.Dec.BitReader br)
+		public static void Reload(Org.Brotli.Dec.BitReader br)
 		{
 			if (br.bitOffset == 64)
 			{
@@ -170,7 +170,7 @@ namespace Org.Brotli.Dec
 		}
 
 		/// <exception cref="System.IO.IOException"/>
-		internal static void Close(Org.Brotli.Dec.BitReader br)
+		public static void Close(Org.Brotli.Dec.BitReader br)
 		{
 			System.IO.Stream @is = br.input;
 			br.input = null;
@@ -180,7 +180,7 @@ namespace Org.Brotli.Dec
 			}
 		}
 
-		internal static void JumpToByteBoundary(Org.Brotli.Dec.BitReader br)
+		public static void JumpToByteBoundary(Org.Brotli.Dec.BitReader br)
 		{
 			int padding = (64 - br.bitOffset) & 7;
 			if (padding != 0)
@@ -193,7 +193,7 @@ namespace Org.Brotli.Dec
 			}
 		}
 
-		internal static int IntAvailable(Org.Brotli.Dec.BitReader br)
+		public static int IntAvailable(Org.Brotli.Dec.BitReader br)
 		{
 			int limit = Capacity;
 			if (br.endOfStreamReached)
@@ -203,7 +203,7 @@ namespace Org.Brotli.Dec
 			return limit - br.intOffset;
 		}
 
-		internal static void CopyBytes(Org.Brotli.Dec.BitReader br, byte[] data, int offset, int length)
+		public static void CopyBytes(Org.Brotli.Dec.BitReader br, byte[] data, int offset, int length)
 		{
 			if ((br.bitOffset & 7) != 0)
 			{

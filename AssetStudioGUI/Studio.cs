@@ -14,32 +14,41 @@ using Object = AssetStudio.Object;
 
 namespace AssetStudioGUI
 {
-    internal enum ExportType
+    public enum ExportType
     {
         Convert,
         Raw,
         Dump
     }
 
-    internal enum ExportFilter
+    public enum ExportFilter
     {
         All,
         Selected,
         Filtered
     }
 
-    internal enum ExportListType
+    public enum ExportListType
     {
         XML
     }
 
-    internal static class Studio
+    public static class Studio
     {
         public static AssetsManager assetsManager = new AssetsManager();
         public static AssemblyLoader assemblyLoader = new AssemblyLoader();
         public static List<AssetItem> exportableAssets = new List<AssetItem>();
         public static List<AssetItem> visibleAssets = new List<AssetItem>();
-        internal static Action<string> StatusStripUpdate = x => { };
+        public static Action<string> StatusStripUpdate = x => { };
+
+        public static void Statis(string[] paths)
+        //public async static void Statis(string[] paths)
+        {
+            assetsManager.LoadFiles(paths);
+            BuildAssetData();
+            //await Task.Run(() => assetsManager.LoadFiles(paths));
+            //await Task.Run(() => BuildAssetData());
+        }
 
         public static int ExtractFolder(string path, string savePath)
         {
@@ -133,6 +142,193 @@ namespace AssetStudioGUI
             return extractedCount;
         }
 
+        public static void BuildAssetData_()
+        {
+            string productName = null;
+            var objectCount = assetsManager.assetsFileList.Sum(x => x.Objects.Count);
+            var objectAssetItemDic = new Dictionary<Object, AssetItem>(objectCount);
+            var containers = new List<(PPtr<Object>, string)>();
+            int i = 0;
+            foreach (var assetsFile in assetsManager.assetsFileList)
+            {
+                foreach (var asset in assetsFile.Objects)
+                {
+                    var assetItem = new AssetItem(asset);
+                    assetItem.originalPath = assetsFile.originalPath;
+                    objectAssetItemDic.Add(asset, assetItem);
+                    assetItem.UniqueID = " #" + i;
+                    var exportable = false;
+                    switch (asset)
+                    {
+                        case GameObject m_GameObject:
+                            assetItem.Text = m_GameObject.m_Name;
+                            break;
+                        case Texture2D m_Texture2D:
+                            if (!string.IsNullOrEmpty(m_Texture2D.m_StreamData?.path))
+                                assetItem.FullSize = asset.byteSize + m_Texture2D.m_StreamData.size;
+                            assetItem.Text = m_Texture2D.m_Name;
+                            exportable = true;
+                            break;
+                        case AudioClip m_AudioClip:
+                            if (!string.IsNullOrEmpty(m_AudioClip.m_Source))
+                                assetItem.FullSize = asset.byteSize + m_AudioClip.m_Size;
+                            assetItem.Text = m_AudioClip.m_Name;
+                            exportable = true;
+                            break;
+                        case VideoClip m_VideoClip:
+                            if (!string.IsNullOrEmpty(m_VideoClip.m_OriginalPath))
+                                assetItem.FullSize = asset.byteSize + (long)m_VideoClip.m_ExternalResources.m_Size;
+                            assetItem.Text = m_VideoClip.m_Name;
+                            exportable = true;
+                            break;
+                        case Shader m_Shader:
+                            assetItem.Text = m_Shader.m_ParsedForm?.m_Name ?? m_Shader.m_Name;
+                            exportable = true;
+                            break;
+                        case Mesh _:
+                        case TextAsset _:
+                        case AnimationClip _:
+                        case Font _:
+                        case MovieTexture _:
+                        case Sprite _:
+                            assetItem.Text = ((NamedObject)asset).m_Name;
+                            exportable = true;
+                            break;
+                        case Animator m_Animator:
+                            if (m_Animator.m_GameObject.TryGet(out var gameObject))
+                            {
+                                assetItem.Text = gameObject.m_Name;
+                            }
+                            exportable = true;
+                            break;
+                        case MonoBehaviour m_MonoBehaviour:
+                            if (m_MonoBehaviour.m_Name == "" && m_MonoBehaviour.m_Script.TryGet(out var m_Script))
+                            {
+                                assetItem.Text = m_Script.m_ClassName;
+                            }
+                            else
+                            {
+                                assetItem.Text = m_MonoBehaviour.m_Name;
+                            }
+                            exportable = true;
+                            break;
+                        case PlayerSettings m_PlayerSettings:
+                            productName = m_PlayerSettings.productName;
+                            break;
+                        case AssetBundle m_AssetBundle:
+                            foreach (var m_Container in m_AssetBundle.m_Container)
+                            {
+                                var preloadIndex = m_Container.Value.preloadIndex;
+                                var preloadSize = m_Container.Value.preloadSize;
+                                var preloadEnd = preloadIndex + preloadSize;
+                                for (int k = preloadIndex; k < preloadEnd; k++)
+                                {
+                                    containers.Add((m_AssetBundle.m_PreloadTable[k], m_Container.Key));
+                                }
+                            }
+                            assetItem.Text = m_AssetBundle.m_Name;
+                            break;
+                        case ResourceManager m_ResourceManager:
+                            foreach (var m_Container in m_ResourceManager.m_Container)
+                            {
+                                containers.Add((m_Container.Value, m_Container.Key));
+                            }
+                            break;
+                        case NamedObject m_NamedObject:
+                            assetItem.Text = m_NamedObject.m_Name;
+                            break;
+                    }
+                    if (assetItem.Text == "")
+                    {
+                        assetItem.Text = assetItem.TypeString + assetItem.UniqueID;
+                    }
+                    if (Properties.Settings.Default.displayAll || exportable)
+                    {
+                        exportableAssets.Add(assetItem);
+                    }
+                }
+            }
+            foreach ((var pptr, var container) in containers)
+            {
+                if (pptr.TryGet(out var obj))
+                {
+                    objectAssetItemDic[obj].Container = container;
+                }
+            }
+            foreach (var tmp in exportableAssets)
+            {
+                tmp.SetSubItems();
+            }
+            containers.Clear();
+
+            visibleAssets = exportableAssets;
+
+            var treeNodeDictionary = new Dictionary<GameObject, GameObjectTreeNode>();
+            var assetsFileCount = assetsManager.assetsFileList.Count;
+            int j = 0;
+            foreach (var assetsFile in assetsManager.assetsFileList)
+            {
+                var fileNode = new TreeNode(assetsFile.fileName); //RootNode
+
+                foreach (var obj in assetsFile.Objects)
+                {
+                    if (obj is GameObject m_GameObject)
+                    {
+                        if (!treeNodeDictionary.TryGetValue(m_GameObject, out var currentNode))
+                        {
+                            currentNode = new GameObjectTreeNode(m_GameObject);
+                            treeNodeDictionary.Add(m_GameObject, currentNode);
+                        }
+
+                        foreach (var pptr in m_GameObject.m_Components)
+                        {
+                            if (pptr.TryGet(out var m_Component))
+                            {
+                                objectAssetItemDic[m_Component].TreeNode = currentNode;
+                                if (m_Component is MeshFilter m_MeshFilter)
+                                {
+                                    if (m_MeshFilter.m_Mesh.TryGet(out var m_Mesh))
+                                    {
+                                        objectAssetItemDic[m_Mesh].TreeNode = currentNode;
+                                    }
+                                }
+                                else if (m_Component is SkinnedMeshRenderer m_SkinnedMeshRenderer)
+                                {
+                                    if (m_SkinnedMeshRenderer.m_Mesh.TryGet(out var m_Mesh))
+                                    {
+                                        objectAssetItemDic[m_Mesh].TreeNode = currentNode;
+                                    }
+                                }
+                            }
+                        }
+
+                        var parentNode = fileNode;
+
+                        if (m_GameObject.m_Transform != null)
+                        {
+                            if (m_GameObject.m_Transform.m_Father.TryGet(out var m_Father))
+                            {
+                                if (m_Father.m_GameObject.TryGet(out var parentGameObject))
+                                {
+                                    if (!treeNodeDictionary.TryGetValue(parentGameObject, out var parentGameObjectNode))
+                                    {
+                                        parentGameObjectNode = new GameObjectTreeNode(parentGameObject);
+                                        treeNodeDictionary.Add(parentGameObject, parentGameObjectNode);
+                                    }
+                                    parentNode = parentGameObjectNode;
+                                }
+                            }
+                        }
+
+                        parentNode.Nodes.Add(currentNode);
+                    }
+                }
+            }
+            treeNodeDictionary.Clear();
+
+            SaveSize(objectAssetItemDic);
+            objectAssetItemDic.Clear();
+        }
         public static (string, List<TreeNode>) BuildAssetData()
         {
             StatusStripUpdate("Building asset list...");

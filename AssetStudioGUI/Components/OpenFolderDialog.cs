@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace AssetStudioGUI
 {
-    internal class OpenFolderDialog
+    public class OpenFolderDialog
     {
         public string InitialFolder { get; set; }
         public string DefaultFolder { get; set; }
         public string Folder { get; private set; }
         public string Title { get; set; }
 
-        internal DialogResult ShowDialog(IWin32Window owner = null)
+        public DialogResult ShowDialog(IWin32Window owner = null)
         {
 //#if NETFRAMEWORK
             if (Environment.OSVersion.Version.Major >= 6)
@@ -100,7 +100,7 @@ namespace AssetStudioGUI
         }
     }
 
-    internal static class NativeMethods
+    public static class NativeMethods
     {
 
         #region Constants  
@@ -121,11 +121,11 @@ namespace AssetStudioGUI
         #region COM  
 
         [ComImport, ClassInterface(ClassInterfaceType.None), TypeLibType(TypeLibTypeFlags.FCanCreate), Guid("DC1C5A9C-E88A-4DDE-A5A1-60F82A20AEF7")]
-        internal class FileOpenDialogRCW { }
+        public class FileOpenDialogRCW { }
 
 
         [ComImport(), Guid("42F85136-DB7E-439C-85F1-E4075D135FC8"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IFileDialog
+        public interface IFileDialog
         {
             [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
             [PreserveSig()]
@@ -204,7 +204,7 @@ namespace AssetStudioGUI
 
 
         [ComImport, Guid("43826D1E-E718-42EE-BC55-A1E261C37BFE"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IShellItem
+        public interface IShellItem
         {
             [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
             uint BindToHandler([In] IntPtr pbc, [In] ref Guid rbhid, [In] ref Guid riid, [Out, MarshalAs(UnmanagedType.Interface)] out IntPtr ppvOut);
@@ -226,6 +226,6 @@ namespace AssetStudioGUI
 
 
         [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellItem ppv);
+        public static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellItem ppv);
     }
 }

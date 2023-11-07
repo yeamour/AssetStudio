@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace SpirV
 {
-	internal class Meta
+	public class Meta
     {
         public class ToolInfo
         {

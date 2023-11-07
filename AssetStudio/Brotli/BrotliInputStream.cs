@@ -14,10 +14,10 @@ namespace Org.Brotli.Dec
 	{
 		public const int DefaultInternalBufferSize = 16384;
 
-		/// <summary>Internal buffer used for efficient byte-by-byte reading.</summary>
+		/// <summary>public buffer used for efficient byte-by-byte reading.</summary>
 		private byte[] buffer;
 
-		/// <summary>Number of decoded but still unused bytes in internal buffer.</summary>
+		/// <summary>Number of decoded but still unused bytes in public buffer.</summary>
 		private int remainingBufferBytes;
 
 		/// <summary>Next unused byte offset.</summary>
@@ -32,7 +32,7 @@ namespace Org.Brotli.Dec
 		/// wrapper that decompresses brotli data.
 		/// <p> For byte-by-byte reading (
 		/// <see cref="ReadByte()"/>
-		/// ) internal buffer with
+		/// ) public buffer with
 		/// <see cref="DefaultInternalBufferSize"/>
 		/// size is allocated and used.
 		/// <p> Will block the thread until first kilobyte of data of source is available.
@@ -50,13 +50,13 @@ namespace Org.Brotli.Dec
 		/// wrapper that decompresses brotli data.
 		/// <p> For byte-by-byte reading (
 		/// <see cref="ReadByte()"/>
-		/// ) internal buffer of specified size is
+		/// ) public buffer of specified size is
 		/// allocated and used.
 		/// <p> Will block the thread until first kilobyte of data of source is available.
 		/// </summary>
 		/// <param name="source">compressed data source</param>
 		/// <param name="byteReadBufferSize">
-		/// size of internal buffer used in case of
+		/// size of public buffer used in case of
 		/// byte-by-byte reading
 		/// </param>
 		/// <exception cref="System.IO.IOException">in case of corrupted data or source stream problems</exception>
@@ -71,13 +71,13 @@ namespace Org.Brotli.Dec
 		/// wrapper that decompresses brotli data.
 		/// <p> For byte-by-byte reading (
 		/// <see cref="ReadByte()"/>
-		/// ) internal buffer of specified size is
+		/// ) public buffer of specified size is
 		/// allocated and used.
 		/// <p> Will block the thread until first kilobyte of data of source is available.
 		/// </summary>
 		/// <param name="source">compressed data source</param>
 		/// <param name="byteReadBufferSize">
-		/// size of internal buffer used in case of
+		/// size of public buffer used in case of
 		/// byte-by-byte reading
 		/// </param>
 		/// <param name="customDictionary">

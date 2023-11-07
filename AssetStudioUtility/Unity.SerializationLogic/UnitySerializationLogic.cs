@@ -12,7 +12,7 @@ using Unity.CecilTools.Extensions;
 
 namespace Unity.SerializationLogic
 {
-    internal class GenericInstanceHolder
+    public class GenericInstanceHolder
     {
         public int Count;
         public IGenericInstance GenericInstance;

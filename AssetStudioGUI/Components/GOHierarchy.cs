@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace AssetStudioGUI
 {
-    internal class GOHierarchy : TreeView
+    public class GOHierarchy : TreeView
     {
         protected override void WndProc(ref Message m)
         {

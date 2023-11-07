@@ -1,10 +1,10 @@
 ﻿namespace AssetStudio.FbxInterop
 {
-    internal static class FbxDll
+    public static class FbxDll
     {
 
-        internal const string DllName = "AssetStudioFBXNative";
-        internal const string FbxsdkDllName = "libfbxsdk";
+        public const string DllName = "AssetStudioFBXNative";
+        public const string FbxsdkDllName = "libfbxsdk";
 
     }
 }

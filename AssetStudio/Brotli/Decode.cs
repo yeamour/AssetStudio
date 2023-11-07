@@ -6,7 +6,7 @@ See file LICENSE for detail or copy at https://opensource.org/licenses/MIT
 namespace Org.Brotli.Dec
 {
 	/// <summary>API for Brotli decompression.</summary>
-	internal sealed class Decode
+	public sealed class Decode
 	{
 		private const int DefaultCodeLength = 8;
 
@@ -249,7 +249,7 @@ namespace Org.Brotli.Dec
 		}
 
 		// TODO: Use specialized versions for smaller tables.
-		internal static void ReadHuffmanCode(int alphabetSize, int[] table, int offset, Org.Brotli.Dec.BitReader br)
+		public static void ReadHuffmanCode(int alphabetSize, int[] table, int offset, Org.Brotli.Dec.BitReader br)
 		{
 			bool ok = true;
 			int simpleCodeOrSkip;
@@ -652,13 +652,13 @@ namespace Org.Brotli.Dec
 			return state.outputUsed < state.outputLength;
 		}
 
-		internal static void SetCustomDictionary(Org.Brotli.Dec.State state, byte[] data)
+		public static void SetCustomDictionary(Org.Brotli.Dec.State state, byte[] data)
 		{
 			state.customDictionary = (data == null) ? new byte[0] : data;
 		}
 
 		/// <summary>Actual decompress implementation.</summary>
-		internal static void Decompress(Org.Brotli.Dec.State state)
+		public static void Decompress(Org.Brotli.Dec.State state)
 		{
 			if (state.runningState == Org.Brotli.Dec.RunningState.Uninitialized)
 			{

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace AssetStudio.FbxInterop
 {
-    internal sealed class FbxExporter : IDisposable
+    public sealed class FbxExporter : IDisposable
     {
 
         private FbxExporterContext _context;
@@ -20,7 +20,7 @@ namespace AssetStudio.FbxInterop
         private readonly int _versionIndex;
         private readonly bool _isAscii;
 
-        internal FbxExporter(string fileName, IImported imported, bool allNodes, bool exportSkins, bool castToBone, float boneSize, bool exportAllUvsAsDiffuseMaps, float scaleFactor, int versionIndex, bool isAscii)
+        public FbxExporter(string fileName, IImported imported, bool allNodes, bool exportSkins, bool castToBone, float boneSize, bool exportAllUvsAsDiffuseMaps, float scaleFactor, int versionIndex, bool isAscii)
         {
             _context = new FbxExporterContext();
 
@@ -64,7 +64,7 @@ namespace AssetStudio.FbxInterop
             IsDisposed = true;
         }
 
-        internal void Initialize()
+        public void Initialize()
         {
             var is60Fps = _imported.AnimationList.Count > 0 && _imported.AnimationList[0].SampleRate.Equals(60.0f);
 
@@ -78,7 +78,7 @@ namespace AssetStudio.FbxInterop
             }
         }
 
-        internal void ExportAll(bool blendShape, bool animation, bool eulerFilter, float filterPrecision)
+        public void ExportAll(bool blendShape, bool animation, bool eulerFilter, float filterPrecision)
         {
             var meshFrames = new List<ImportedFrame>();
 
