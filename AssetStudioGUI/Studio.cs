@@ -577,8 +577,9 @@ namespace AssetStudioGUI
                     path = asset.originalPath;
                 }
             }
-            File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.csv", sb.ToString());
-            File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.json", JsonConvert.SerializeObject(result, Formatting.Indented));
+            string file_name = "/AssetSize" + DateTime.Today.ToString("MM-dd-hh-mm-ss");
+            File.WriteAllText(Path.GetDirectoryName(path) + file_name + ".csv", sb.ToString());
+            File.WriteAllText(Path.GetDirectoryName(path) + file_name + ".json", JsonConvert.SerializeObject(result, Formatting.Indented));
         }
 
 
