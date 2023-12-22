@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using AssetStudioGUI;
+
 Console.WriteLine("Hello, World!");
-//AssetStudioGUI.AssetSizeHelper.Test();
-AssetStudioGUI.Program.Test();
+AssetSizeHelper.Test();
