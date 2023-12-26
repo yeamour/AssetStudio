@@ -11,10 +11,10 @@ namespace AssetStudioGUI
     public class AssetSizeHelper
     {
         public static AssetsManager assetsManager = new AssetsManager();
-        public static void Statis(string[] paths)
+        public static string Statis(string[] paths)
         {
             assetsManager.LoadFiles(paths);
-            BuildAssetData();
+            return BuildAssetData();
         }
 
         public static void Test()
@@ -24,7 +24,7 @@ namespace AssetStudioGUI
             Statis(files);
         }
 
-        private static void BuildAssetData()
+        private static string BuildAssetData()
         {
             string productName = null;
             var objectCount = assetsManager.assetsFileList.Sum(x => x.Objects.Count);
@@ -132,13 +132,12 @@ namespace AssetStudioGUI
             
             containers.Clear();
 
-            SaveSize(objectAssetItemDic);
-            objectAssetItemDic.Clear();
+            return SaveSize(objectAssetItemDic);
         }
 
-        private static void SaveSize(Dictionary<Object, AssetSize> objectAssetItemDic)
+        private static string SaveSize(Dictionary<Object, AssetSize> objectAssetItemDic)
         {
-            if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return;
+            if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return string.Empty;
 
             string path = string.Empty;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -156,9 +155,12 @@ namespace AssetStudioGUI
                     path = info.originalPath;
                 }
             }
-            string file_name = "/AssetSize" + System.DateTime.Now.ToString("MM-dd-HH-mm-ss");
+            objectAssetItemDic.Clear();
+
+            string file_name = "/AssetSize";// + System.DateTime.Now.ToString("MM-dd-HH-mm-ss")
             File.WriteAllText(Path.GetDirectoryName(path) + file_name + ".csv", sb.ToString());
             File.WriteAllText(Path.GetDirectoryName(path) + file_name + ".json", JsonConvert.SerializeObject(result, Formatting.Indented));
+            return file_name;
         }
 
         private class AssetSize
