@@ -11,20 +11,22 @@ namespace AssetStudioGUI
     public class AssetSizeHelper
     {
         public static AssetsManager assetsManager = new AssetsManager();
-        public static string Statis(string[] paths)
+        public static void Statis(string[] paths)
         {
+            assetsManager.Clear();
             assetsManager.LoadFiles(paths);
-            return BuildAssetData();
+            BuildAssetData();
         }
 
         public static void Test()
         {
-            string path = "G:/1101/luclover_svn_39006_0.0.1_1_20231101_094957-apk-ab/Bundles/Android";
+            //string path = "G:/1101/luclover_svn_39006_0.0.1_1_20231101_094957-apk-ab/Bundles/Android";
+            string path = "G:/gamef/chengxu/client/temp/Bundles-16-45-33/Bundles/Android";
             string[] files = Directory.GetFiles(path, "*.ab", SearchOption.AllDirectories);
             Statis(files);
         }
 
-        private static string BuildAssetData()
+        private static void BuildAssetData()
         {
             string productName = null;
             var objectCount = assetsManager.assetsFileList.Sum(x => x.Objects.Count);
@@ -132,12 +134,12 @@ namespace AssetStudioGUI
             
             containers.Clear();
 
-            return SaveSize(objectAssetItemDic);
+            SaveSize(objectAssetItemDic);
         }
 
-        private static string SaveSize(Dictionary<Object, AssetSize> objectAssetItemDic)
+        private static void SaveSize(Dictionary<Object, AssetSize> objectAssetItemDic)
         {
-            if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return string.Empty;
+            if (objectAssetItemDic == null || objectAssetItemDic.Count == 0) return;
 
             string path = string.Empty;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -157,10 +159,9 @@ namespace AssetStudioGUI
             }
             objectAssetItemDic.Clear();
 
-            string file_name = "/AssetSize";// + System.DateTime.Now.ToString("MM-dd-HH-mm-ss")
-            File.WriteAllText(Path.GetDirectoryName(path) + file_name + ".csv", sb.ToString());
-            File.WriteAllText(Path.GetDirectoryName(path) + file_name + ".json", JsonConvert.SerializeObject(result, Formatting.Indented));
-            return file_name;
+            //string file_name = "AssetSize";// + System.DateTime.Now.ToString("MM-dd-HH-mm-ss")
+            File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.csv", sb.ToString());
+            File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.json", JsonConvert.SerializeObject(result, Formatting.Indented));
         }
 
         private class AssetSize
