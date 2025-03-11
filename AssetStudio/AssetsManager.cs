@@ -21,6 +21,8 @@ namespace AssetStudio
         private HashSet<string> noexistFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private HashSet<string> assetsFileListHash = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+        public static bool ABSize = false;
+
         public void LoadFiles(params string[] files)
         {
             var path = Path.GetDirectoryName(Path.GetFullPath(files[0]));
@@ -29,12 +31,24 @@ namespace AssetStudio
             Load(toReadFile);
         }
 
+        public void LoadFilesAbSize(params string[] files)
+        {
+            ABSize = true;
+            LoadFiles(files);
+        }
+
         public void LoadFolder(string path)
         {
             MergeSplitAssets(path, true);
             var files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).ToList();
             var toReadFile = ProcessingSplitFiles(files);
             Load(toReadFile);
+        }
+
+        public void LoadFolderAbSize(string path)
+        {
+            ABSize = true;
+            LoadFolder(path);
         }
 
         private void Load(string[] files)
@@ -58,7 +72,7 @@ namespace AssetStudio
             noexistFiles.Clear();
             assetsFileListHash.Clear();
 
-            ReadAssets();
+            ReadAssets();           
             ProcessAssets();
         }
 
@@ -374,6 +388,18 @@ namespace AssetStudio
             resourceFileReaders.Clear();
 
             assetsFileIndexCache.Clear();
+        }
+
+        private void CalAssetSizeInBundle()
+        {
+            foreach (var assetsFile in assetsFileList)
+            {
+                foreach (var objectInfo in assetsFile.m_Objects)
+                {
+                    //var objectReader = new ObjectReader(assetsFile.reader, assetsFile, objectInfo);
+
+                }
+            }
         }
 
         private void ReadAssets()

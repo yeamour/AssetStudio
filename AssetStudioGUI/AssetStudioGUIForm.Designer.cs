@@ -34,6 +34,8 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFileabSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFolderabSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.extractFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -167,6 +169,8 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadFileToolStripMenuItem,
             this.loadFolderToolStripMenuItem,
+            this.loadFileabSizeToolStripMenuItem,
+            this.loadFolderabSizeToolStripMenuItem,
             this.toolStripMenuItem1,
             this.extractFileToolStripMenuItem,
             this.extractFolderToolStripMenuItem});
@@ -177,33 +181,47 @@
             // loadFileToolStripMenuItem
             // 
             this.loadFileToolStripMenuItem.Name = "loadFileToolStripMenuItem";
-            this.loadFileToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.loadFileToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.loadFileToolStripMenuItem.Text = "Load file";
             this.loadFileToolStripMenuItem.Click += new System.EventHandler(this.loadFile_Click);
             // 
             // loadFolderToolStripMenuItem
             // 
             this.loadFolderToolStripMenuItem.Name = "loadFolderToolStripMenuItem";
-            this.loadFolderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.loadFolderToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.loadFolderToolStripMenuItem.Text = "Load folder";
             this.loadFolderToolStripMenuItem.Click += new System.EventHandler(this.loadFolder_Click);
+            // 
+            // loadFileabSizeToolStripMenuItem
+            // 
+            this.loadFileabSizeToolStripMenuItem.Name = "loadFileabSizeToolStripMenuItem";
+            this.loadFileabSizeToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.loadFileabSizeToolStripMenuItem.Text = "Load file(ab size)";
+            this.loadFileabSizeToolStripMenuItem.Click += new System.EventHandler(this.loadFileabSizeToolStripMenuItem_Click);
+            // 
+            // loadFolderabSizeToolStripMenuItem
+            // 
+            this.loadFolderabSizeToolStripMenuItem.Name = "loadFolderabSizeToolStripMenuItem";
+            this.loadFolderabSizeToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.loadFolderabSizeToolStripMenuItem.Text = "Load folder(ab size)";
+            this.loadFolderabSizeToolStripMenuItem.Click += new System.EventHandler(this.loadFolderabSizeToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(151, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(190, 6);
             // 
             // extractFileToolStripMenuItem
             // 
             this.extractFileToolStripMenuItem.Name = "extractFileToolStripMenuItem";
-            this.extractFileToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.extractFileToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.extractFileToolStripMenuItem.Text = "Extract file";
             this.extractFileToolStripMenuItem.Click += new System.EventHandler(this.extractFileToolStripMenuItem_Click);
             // 
             // extractFolderToolStripMenuItem
             // 
             this.extractFolderToolStripMenuItem.Name = "extractFolderToolStripMenuItem";
-            this.extractFolderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.extractFolderToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.extractFolderToolStripMenuItem.Text = "Extract folder";
             this.extractFolderToolStripMenuItem.Click += new System.EventHandler(this.extractFolderToolStripMenuItem_Click);
             // 
@@ -240,6 +258,7 @@
             this.enablePreview.ToolTipText = "Toggle the loading and preview of readable assets, such as images, sounds, text, " +
     "etc.\r\nDisable preview if you have performance or compatibility issues.";
             this.enablePreview.CheckedChanged += new System.EventHandler(this.enablePreview_Check);
+            this.enablePreview.Click += new System.EventHandler(this.enablePreview_Click);
             // 
             // displayInfo
             // 
@@ -1209,6 +1228,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem14;
         private System.Windows.Forms.ToolStripTextBox specifyUnityVersion;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem15;
+        private System.Windows.Forms.ToolStripMenuItem loadFileabSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadFolderabSizeToolStripMenuItem;
     }
 }
 

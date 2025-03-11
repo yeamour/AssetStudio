@@ -1,4 +1,5 @@
 ﻿using AssetStudio;
+using K4os.Compression.LZ4;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -345,6 +346,7 @@ namespace AssetStudioGUI
             public string container;
             public string type;
             public float size;
+            public int compressSize;
 
             public AssetSize(string name, string bundle, string container, string type, float size)
             {
@@ -357,7 +359,7 @@ namespace AssetStudioGUI
 
             public string ToCSV()
             {
-                return $"{name},{bundle},{container},{type},{size}";
+                return $"{name},{bundle},{container},{type},{size},{compressSize}";
             }
         }
         private static void SaveSize(Dictionary<Object, AssetItem> objectAssetItemDic)
@@ -366,15 +368,19 @@ namespace AssetStudioGUI
 
             string path = string.Empty;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.Append("name,bundle,container,type,size");
+            sb.Append("name,bundle,container,type,size,compressSize");
             sb.AppendLine();
             List<AssetSize> result = new List<AssetSize>();
             foreach (var item in objectAssetItemDic)
             {
                 AssetItem asset = item.Value;
-                var size = new AssetSize(asset.Text, Path.GetFileName(asset.originalPath), asset.Container, asset.TypeString, asset.FullSize);
-                result.Add(size);
-                sb.Append(size.ToCSV());
+                var assetSize = new AssetSize(asset.Text, Path.GetFileName(asset.originalPath), asset.Container, asset.TypeString, asset.FullSize);
+                if (AssetsManager.ABSize)
+                {
+                    assetSize.compressSize = CalAssetCompressSize(asset);
+                }
+                result.Add(assetSize);
+                sb.Append(assetSize.ToCSV());
                 sb.AppendLine();
                 if (path == string.Empty)
                 {
@@ -385,6 +391,35 @@ namespace AssetStudioGUI
             File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.json", JsonConvert.SerializeObject(result, Formatting.Indented));
         }
 
+        private static unsafe int CalAssetCompressSize(AssetItem asset)
+        {
+            if (asset == null) return 0;
+           
+            var uncompressedSize = (int)asset.Asset.byteSize;
+            var uncompressedBytes = BigArrayPool<byte>.Shared.Rent(uncompressedSize);
+            var raw = asset.Asset.GetRawData();
+            for (int i = 0; i < uncompressedSize; i++)
+            {
+                uncompressedBytes[i] = raw[i];
+            }
+            fixed (byte* uncompressedIndex = uncompressedBytes)
+            {
+                //TODO 根據不同的壓縮類型計算壓縮後的大小
+                var compressedSize = LZ4Codec.MaximumOutputSize(uncompressedSize);
+                var compressedBytes = BigArrayPool<byte>.Shared.Rent(compressedSize);
+                fixed (byte* compressedIndex = compressedBytes)
+                {
+                    var numWrite = LZ4Codec.Encode(uncompressedIndex, uncompressedSize, compressedIndex, compressedSize);
+                    if (numWrite > compressedSize)
+                    {
+                        throw new IOException($"Lz4 compression error, write {numWrite} bytes big than{compressedSize} bytes");
+                    }
+                    BigArrayPool<byte>.Shared.Return(compressedBytes);
+                    BigArrayPool<byte>.Shared.Return(uncompressedBytes);
+                    return numWrite;
+                }
+            }
+        }
 
         public static Dictionary<string, SortedDictionary<int, TypeTreeItem>> BuildClassStructure()
         {

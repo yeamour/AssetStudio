@@ -2049,6 +2049,43 @@ namespace AssetStudioGUI
             logger.ShowErrorMessage = toolStripMenuItem15.Checked;
         }
 
+        private void enablePreview_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void assetSizeInBundle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void loadFileabSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.InitialDirectory = openDirectoryBackup;
+            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
+            {
+                ResetForm();
+                openDirectoryBackup = Path.GetDirectoryName(openFileDialog1.FileNames[0]);
+                assetsManager.SpecifyUnityVersion = specifyUnityVersion.Text;
+                await Task.Run(() => assetsManager.LoadFilesAbSize(openFileDialog1.FileNames));
+                BuildAssetStructures();
+            }
+        }
+
+        private async void loadFolderabSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var openFolderDialog = new OpenFolderDialog();
+            openFolderDialog.InitialFolder = openDirectoryBackup;
+            if (openFolderDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                ResetForm();
+                openDirectoryBackup = openFolderDialog.Folder;
+                assetsManager.SpecifyUnityVersion = specifyUnityVersion.Text;
+                await Task.Run(() => assetsManager.LoadFolderAbSize(openFolderDialog.Folder));
+                BuildAssetStructures();
+            }
+        }
+
         private void glControl1_MouseWheel(object sender, MouseEventArgs e)
         {
             if (glControl1.Visible)
