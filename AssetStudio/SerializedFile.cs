@@ -1,4 +1,5 @@
-﻿using System;
+﻿using K4os.Compression.LZ4;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -231,6 +232,7 @@ namespace AssetStudio
 
         private SerializedType ReadSerializedType(bool isRefType)
         {
+            reader.BeginRecord();
             var type = new SerializedType();
 
             type.classID = reader.ReadInt32();
@@ -285,7 +287,36 @@ namespace AssetStudio
                 }
             }
 
+            reader.EndRecord();
+            type.compressSize = CalAssetCompressSize(reader.GetRecord());
             return type;
+        }
+
+        public static unsafe int CalAssetCompressSize(byte[] bytes)
+        {
+            int uncompressedSize = bytes.Length;
+            var uncompressedBytes = BigArrayPool<byte>.Shared.Rent(uncompressedSize);
+            for (int i = 0; i < uncompressedSize; i++)
+            {
+                uncompressedBytes[i] = bytes[i];
+            }
+            fixed (byte* uncompressedIndex = uncompressedBytes)
+            {
+                //TODO 根據不同的壓縮類型計算壓縮後的大小
+                var compressedSize = LZ4Codec.MaximumOutputSize(uncompressedSize);
+                var compressedBytes = BigArrayPool<byte>.Shared.Rent(compressedSize);
+                fixed (byte* compressedIndex = compressedBytes)
+                {
+                    var numWrite = LZ4Codec.Encode(uncompressedIndex, uncompressedSize, compressedIndex, compressedSize, LZ4Level.L00_FAST);
+                    if (numWrite > compressedSize)
+                    {
+                        throw new IOException($"Lz4 compression error, write {numWrite} bytes big than{compressedSize} bytes");
+                    }
+                    BigArrayPool<byte>.Shared.Return(compressedBytes);
+                    BigArrayPool<byte>.Shared.Return(uncompressedBytes);
+                    return numWrite;
+                }
+            }
         }
 
         private void ReadTypeTree(TypeTree m_Type, int level = 0)
@@ -357,7 +388,7 @@ namespace AssetStudio
                 if (isOffset)
                 {
                     stringBufferReader.BaseStream.Position = value;
-                    return stringBufferReader.ReadStringToNull();
+                    return stringBufferReader.ReadStringToNull().txt;
                 }
                 var offset = value & 0x7FFFFFFF;
                 if (CommonString.StringBuffer.TryGetValue(offset, out var str))

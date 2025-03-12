@@ -333,6 +333,8 @@ namespace AssetStudioGUI
             }
             treeNodeDictionary.Clear();
 
+            SaveTypeTree(assetsManager.assetsFileList);
+            SaveTypeTree(assetsManager.assetsFileList, true);   
             SaveSize(objectAssetItemDic);
             objectAssetItemDic.Clear();
 
@@ -391,35 +393,77 @@ namespace AssetStudioGUI
             File.WriteAllText(Path.GetDirectoryName(path) + "/AssetSize.json", JsonConvert.SerializeObject(result, Formatting.Indented));
         }
 
+        private class TypeTreeInfo
+        {
+            public int classID;
+            public bool m_IsStrippedType;
+            public short m_ScriptTypeIndex = -1;
+            public string m_KlassName;
+            public string m_NameSpace;
+            public string m_AsmName;
+            public int compressSize;
+
+            public TypeTreeInfo(int classID, bool m_IsStrippedType, short m_ScriptTypeIndex, string m_KlassName, string m_NameSpace, string m_AsmName, int compressSize)
+            {
+                this.classID = classID;
+                this.m_IsStrippedType = m_IsStrippedType;
+                this.m_ScriptTypeIndex = m_ScriptTypeIndex;
+                this.m_KlassName = m_KlassName;
+                this.m_NameSpace = m_NameSpace;
+                this.m_AsmName = m_AsmName;
+                this.compressSize = compressSize;
+            }
+
+            public string ToCSV()
+            {
+                return $"{classID},{m_IsStrippedType},{m_ScriptTypeIndex},{m_KlassName},{m_NameSpace},{m_AsmName},{compressSize}";
+            }
+        }
+
+        private static void SaveTypeTree(List<SerializedFile> assetsFileList, bool isRefTypes = false)
+        {
+            string path = string.Empty;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append("classID,m_IsStrippedType,m_ScriptTypeIndex,m_KlassName,m_NameSpace,m_AsmName,compressSize");
+            sb.AppendLine();
+            List<TypeTreeInfo> result = new List<TypeTreeInfo>();
+
+            foreach (var assetsFile in assetsFileList)
+            {
+                List<SerializedType> types = assetsFile.m_Types;
+                if (isRefTypes)
+                    types = assetsFile.m_RefTypes;
+
+                foreach (var st in types)
+                {
+                    var assetSize = new TypeTreeInfo(st.classID, st.m_IsStrippedType, st.m_ScriptTypeIndex, st.m_KlassName, st.m_NameSpace, st.m_AsmName, st.compressSize);
+                    result.Add(assetSize);
+                    sb.Append(assetSize.ToCSV());
+                    sb.AppendLine();
+                }
+
+                if (path == string.Empty)
+                {
+                    path = assetsFile.originalPath;
+                }
+            }
+
+            
+            string filePath = $"{Path.GetDirectoryName(path)}/TypeTreeInfo";
+            if (isRefTypes)
+                filePath = $"{Path.GetDirectoryName(path)}/RefTypeTreeInfo";
+
+            File.WriteAllText(filePath + ".csv", sb.ToString());
+            File.WriteAllText(filePath + ".json", JsonConvert.SerializeObject(result, Formatting.Indented));
+        }
+
         private static unsafe int CalAssetCompressSize(AssetItem asset)
         {
             if (asset == null) return 0;
-           
-            var uncompressedSize = (int)asset.Asset.byteSize;
-            var uncompressedBytes = BigArrayPool<byte>.Shared.Rent(uncompressedSize);
-            var raw = asset.Asset.GetRawData();
-            for (int i = 0; i < uncompressedSize; i++)
-            {
-                uncompressedBytes[i] = raw[i];
-            }
-            fixed (byte* uncompressedIndex = uncompressedBytes)
-            {
-                //TODO 根據不同的壓縮類型計算壓縮後的大小
-                var compressedSize = LZ4Codec.MaximumOutputSize(uncompressedSize);
-                var compressedBytes = BigArrayPool<byte>.Shared.Rent(compressedSize);
-                fixed (byte* compressedIndex = compressedBytes)
-                {
-                    var numWrite = LZ4Codec.Encode(uncompressedIndex, uncompressedSize, compressedIndex, compressedSize);
-                    if (numWrite > compressedSize)
-                    {
-                        throw new IOException($"Lz4 compression error, write {numWrite} bytes big than{compressedSize} bytes");
-                    }
-                    BigArrayPool<byte>.Shared.Return(compressedBytes);
-                    BigArrayPool<byte>.Shared.Return(uncompressedBytes);
-                    return numWrite;
-                }
-            }
+            return SerializedFile.CalAssetCompressSize(asset.Asset.GetRawData());
         }
+
+        
 
         public static Dictionary<string, SortedDictionary<int, TypeTreeItem>> BuildClassStructure()
         {

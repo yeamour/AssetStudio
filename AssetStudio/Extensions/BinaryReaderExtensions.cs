@@ -35,7 +35,7 @@ namespace AssetStudio
             return "";
         }
 
-        public static string ReadStringToNull(this BinaryReader reader, int maxLength = 32767)
+        public static (string txt, int count) ReadStringToNull(this BinaryReader reader, int maxLength = 32767)
         {
             var bytes = new List<byte>();
             int count = 0;
@@ -49,7 +49,14 @@ namespace AssetStudio
                 bytes.Add(b);
                 count++;
             }
-            return Encoding.UTF8.GetString(bytes.ToArray());
+            return (Encoding.UTF8.GetString(bytes.ToArray()), count);
+        }
+
+        public static string ReadStringToNull(this EndianBinaryReader reader, int maxLength = 32767)
+        {
+            var t = (reader as BinaryReader).ReadStringToNull(maxLength);
+            reader.AddRecord(t.count);
+            return t.txt;
         }
 
         public static Quaternion ReadQuaternion(this BinaryReader reader)

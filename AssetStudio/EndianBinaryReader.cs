@@ -10,6 +10,10 @@ namespace AssetStudio
 
         public EndianType Endian;
 
+        private bool isRecord = false;
+        private long recordIndex;
+        private long recordSize;
+
         public EndianBinaryReader(Stream stream, EndianType endian = EndianType.BigEndian) : base(stream)
         {
             Endian = endian;
@@ -22,8 +26,50 @@ namespace AssetStudio
             set => BaseStream.Position = value;
         }
 
+        public void BeginRecord()
+        {
+            isRecord = true;
+            recordIndex = Position;
+            recordSize = 0;
+        }
+        public void EndRecord()
+        {
+            isRecord = false;
+        }
+        public bool IsRecord()
+        {
+            return isRecord;
+        }
+        public void AddRecord(int size)
+        {
+            if (!isRecord) return;
+
+            recordSize += size;
+        }
+        public byte[] GetRecord()
+        {
+            long oldPosition = Position;
+            Position = recordIndex;
+            byte[] result = ReadBytes((int)recordSize);
+            Position = oldPosition;
+            return result;
+        }
+
+        public override bool ReadBoolean()
+        {
+            AddRecord(1);
+            return base.ReadBoolean();
+        }
+
+        public override byte[] ReadBytes(int count)
+        {
+            AddRecord(count);
+            return base.ReadBytes(count);
+        }
+
         public override short ReadInt16()
         {
+            AddRecord(2);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 2);
@@ -34,6 +80,7 @@ namespace AssetStudio
 
         public override int ReadInt32()
         {
+            AddRecord(4);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 4);
@@ -44,6 +91,7 @@ namespace AssetStudio
 
         public override long ReadInt64()
         {
+            AddRecord(8);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 8);
@@ -54,6 +102,7 @@ namespace AssetStudio
 
         public override ushort ReadUInt16()
         {
+            AddRecord(2);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 2);
@@ -64,6 +113,7 @@ namespace AssetStudio
 
         public override uint ReadUInt32()
         {
+            AddRecord(4);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 4);
@@ -74,6 +124,7 @@ namespace AssetStudio
 
         public override ulong ReadUInt64()
         {
+            AddRecord(8);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 8);
@@ -84,6 +135,7 @@ namespace AssetStudio
 
         public override float ReadSingle()
         {
+            AddRecord(4);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 4);
@@ -95,6 +147,7 @@ namespace AssetStudio
 
         public override double ReadDouble()
         {
+            AddRecord(8);
             if (Endian == EndianType.BigEndian)
             {
                 Read(buffer, 0, 8);

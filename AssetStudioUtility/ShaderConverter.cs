@@ -1050,7 +1050,7 @@ namespace AssetStudio
                                 int offset = reader.ReadInt32();
                                 reader.BaseStream.Position = offset;
                             }
-                            var entryName = reader.ReadStringToNull();
+                            var entryName = reader.ReadStringToNull().txt;
                             var buff = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
                             sb.Append(Encoding.UTF8.GetString(buff));
                         }
